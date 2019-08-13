@@ -2,7 +2,22 @@ import React from 'react';
 
 function Cal() {
 
-let monthObject = [
+const dayStyling = {
+	display: "inline",
+	padding: "0.2rem",
+}
+
+const monthStyling = {
+	marginBottom: "10vh",
+	display: "grid",
+	gridTemplateColumns: "repeat(7, auto)",
+	gridTemplateRows: "repeat(5, 20px)",
+}
+const calStyle = {
+	height: "70px",
+	width: "70px",
+}
+const monthObject = [
    {name: "jan",
 	days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},
 	{name: "feb", 
@@ -28,11 +43,11 @@ let monthObject = [
 ]
 
   return (
-    <div>
+    <div style={calStyle}>
      {monthObject.map(month => { 
-     	return (<div>{month.name}
+     	return (<div style={monthStyling}>{month.name}
      		{month.days.map(day=>{
-     			return (<p>{day}</p>)
+     			return (<p style={dayStyling}>{day}</p>)
      		})}</div>) } ) }
 
     </div>
@@ -41,8 +56,4 @@ let monthObject = [
 
 export default Cal;
 
-
-// create 12 months with each one having an array representing days they contain
-// forget the leap year
-//now create a component that will render it in some way,
 
