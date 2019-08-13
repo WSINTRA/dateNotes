@@ -5,7 +5,7 @@ import Cal from './components/cal'
 function App() {
   return (
     <div className="App">
-    <Cal/>
+    <Cal month={"feb"} day={12}/>
     </div>
   );
 }

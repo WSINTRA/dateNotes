@@ -1,10 +1,13 @@
 import React from 'react';
 
-function Cal() {
+function Cal(props) {
 
 const dayStyling = {
 	display: "inline",
 	padding: "0.2rem",
+}
+const highlightedDayStyle = {
+	border: "solid",
 }
 
 const monthStyling = {
@@ -12,6 +15,13 @@ const monthStyling = {
 	display: "grid",
 	gridTemplateColumns: "repeat(7, auto)",
 	gridTemplateRows: "repeat(5, 20px)",
+}
+const boxStyle = {
+	marginBottom: "10vh",
+	gridGap: "3vw",
+	display: "grid",
+	gridTemplateColumns: "repeat(4, auto)",
+	gridAutoRows: "minmax(100px, auto)",
 }
 const calStyle = {
 	height: "70px",
@@ -41,15 +51,33 @@ const monthObject = [
 	{name: "dec", 
 	days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},
 ]
+const selection = monthObject.filter(month => month.name === props.month)
 
   return (
     <div style={calStyle}>
-     {monthObject.map(month => { 
-     	return (<div style={monthStyling}>{month.name}
-     		{month.days.map(day=>{
-     			return (<p style={dayStyling}>{day}</p>)
-     		})}</div>) } ) }
 
+    <div style={boxStyle}>
+
+    {selection.map( month => { 
+    	return ( <div style={monthStyling}> 
+    		{month.name}
+    		{month.days.map( day=> {
+		    			return (day===props.day ? 
+		    				<p style={dayStyling}>
+		    				<b style={highlightedDayStyle}>{day}
+		    				</b></p> : 
+		    				<p style={dayStyling}>{day}
+		    				</p>
+		    				)
+    					  }
+    					)
+    				}
+    			</div>
+    			) 
+ 		    } 
+   		) 
+	}
+    </div>
     </div>
   );
 }
