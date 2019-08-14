@@ -33,8 +33,7 @@ const monNameStyle = {
 }
 const calStyle = {
 
-  borderBottomRightRadius: '2rem',
-	backgroundImage: "linear-gradient(#D1DEFF, #91ECFF, #FFDFA4)",
+    borderBottomRightRadius: '2rem',
 	height: "43vh",
 	width: "15vw",
 }
