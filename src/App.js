@@ -36,12 +36,37 @@ let date = d.toDateString().split(' ');
       return null
     }
 }
-
+//pass the date along with a 1 or a -1 for right and left,
 arrowClick =(e, month)=> {
- 
   let direction = e.currentTarget.getAttribute("name")
-  console.log(direction," arrow clicked", month)
+  switch(direction) {
+    case "right":
+    this.getDate(month, 1)
+    break;
+    case "left":
+    this.getDate(month, -1)
+    break;
+  }
+  
+}
 
+getDate = (prev,upOrDown) => {
+  let months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
+  let selectedMonth = "";
+
+  if ( prev === "dec" && upOrDown === 1 ){
+    selectedMonth = "jan"
+  }
+  else if (prev === "jan" && upOrDown === -1){
+    selectedMonth = "dec"
+  }
+  else {
+    selectedMonth = months[months.indexOf(prev) + upOrDown]
+  }
+
+  this.setState({
+    selectedMonth: selectedMonth
+  })
 }
 
 monthObject = [
@@ -63,6 +88,8 @@ monthObject = [
   days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},
   {name: "sep", 
   days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},
+  {name: "oct", 
+  days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},
   {name: "nov", 
   days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30]},
   {name: "dec", 
