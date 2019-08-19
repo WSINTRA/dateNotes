@@ -12,6 +12,9 @@ class App extends React.Component {
     username: "",
     password: "",
     email: "",
+    userData: [],
+    loggedIn: false,
+    registered: false,
   }
 
 componentDidMount() {
@@ -19,6 +22,19 @@ componentDidMount() {
     selectedDate: this.getTodaysDay("date"),
     selectedMonth: this.getTodaysDay("month")
   })
+
+  if (localStorage.JWT) {
+    fetch("http://localhost:3050/api/v1/notes", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.JWT}`
+      }
+    }).then(res => res.json()).then(res => this.setState({
+      userData: res,
+      loggedIn: true
+    }) );
+  }
+
 }
 /////////////////////////////////////////////////////////
 getTodaysDay = (request) =>{
@@ -101,7 +117,8 @@ monthObject = [
 
 
 //////////////////////////////////////////
-createNewUser = () => {
+createNewUser = (event) => {
+  event.preventDefault()
   //Build some sort of error handling for username, email and password
   console.log("submitting",{user: {
         username: this.state.username,
@@ -125,7 +142,11 @@ createNewUser = () => {
 
     })
   }
-  )
+  ).then(res=> res.json()).then(user => {
+    localStorage.setItem("JWT", user.jwt);
+    this.setState( {userData: user.auth} )
+  }).then(()=> alert("Registered"))
+
 }
 
 inputCatcher=(event)=>{
@@ -139,7 +160,7 @@ inputCatcher=(event)=>{
 render() {
 
 console.log(this.state)
- const {username, email, password} = this.state
+ const {registered, username, email, password, loggedIn} = this.state
 return (
 
     <div className="App">
@@ -151,12 +172,14 @@ return (
     date={this.state.selectedDate}
     arrowClick={this.arrowClick}
     />
-    <LoginForm
+    {loggedIn ? null : <LoginForm
+    loggedIn={loggedIn}
+    registered={registered}
     inputCatcher={this.inputCatcher} 
     username={username}
     password={password}
     email={email}
-    submit={this.createNewUser}/>
+    submit={this.createNewUser}/>}
     </div>
   );
 }

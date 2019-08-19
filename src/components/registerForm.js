@@ -40,7 +40,7 @@ function RegisterForm(props){
 		    name="email" />
 		  </label>
 		  <input style={buttonStyle} 
-		  onClick={props.submit}
+		  onClick={(e)=>props.submit(e)}
 		  type="submit" 
 		  value="Register" />
 		</form>

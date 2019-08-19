@@ -12,7 +12,7 @@ function LoginForm(props){
 	let buttonStyle = {
 
 	}
-	let loggedInTestToken = true
+	let loggedInTestToken = props.registered
 
 	return (
     loggedInTestToken ? <RegisterForm 
