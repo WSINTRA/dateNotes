@@ -27,7 +27,7 @@ const monthStyling = {
 	display: "grid",
 	gridTemplateColumns: "repeat(7, auto)",
 	gridTemplateRows: "repeat(5, 20px)",
-	cursor: "grab",
+	cursor: "crosshair",
 }
 const boxStyle = {
 	marginBottom: "10vh",
