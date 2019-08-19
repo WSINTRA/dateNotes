@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import Cal from './components/cal'
 import LoginForm from './components/loginForm'
-
+import NewNote from './components/newNote'
 class App extends React.Component {
 
   state = {
@@ -172,7 +172,7 @@ return (
     date={this.state.selectedDate}
     arrowClick={this.arrowClick}
     />
-    {loggedIn ? null : <LoginForm
+    {loggedIn ? <NewNote/> : <LoginForm
     loggedIn={loggedIn}
     registered={registered}
     inputCatcher={this.inputCatcher} 
