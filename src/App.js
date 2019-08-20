@@ -4,6 +4,8 @@ import './App.css';
 import Cal from './components/cal'
 import LoginForm from './components/loginForm'
 import NewNote from './components/newNote'
+import dateString from './components/dateString'
+
 class App extends React.Component {
 
   state = {
@@ -13,8 +15,12 @@ class App extends React.Component {
     password: "",
     email: "",
     userData: [],
-    loggedIn: false,
-    registered: false,
+    noteData: [],
+    loggedIn: null,
+    unregistered: true,
+    color: {},
+    eventChange: "",
+    noteValue: ""
   }
 
 componentDidMount() {
@@ -24,7 +30,7 @@ componentDidMount() {
   })
 
   if (localStorage.JWT) {
-    fetch("http://localhost:3050/api/v1/notes", {
+    fetch("http://localhost:3050/api/v1/profile", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${localStorage.JWT}`
@@ -32,6 +38,14 @@ componentDidMount() {
     }).then(res => res.json()).then(res => this.setState({
       userData: res,
       loggedIn: true
+    }) );
+  fetch("http://localhost:3050/api/v1/notes", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${localStorage.JWT}`
+      }
+    }).then(res => res.json()).then(res => this.setState({
+      noteData: res,
     }) );
   }
 
@@ -144,9 +158,33 @@ createNewUser = (event) => {
   }
   ).then(res=> res.json()).then(user => {
     localStorage.setItem("JWT", user.jwt);
-    this.setState( {userData: user.auth} )
+    this.setState( {userData: user.auth,
+      unregistered: false} )
   }).then(()=> alert("Registered"))
 
+}
+////////////////////////////////////////////////
+//Login needs to return a JWT
+loginUser = (event) => {
+fetch("http://localhost:3050/api/v1/login", {
+  method: "POST",
+  headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json"
+    },
+    body: JSON.stringify({
+      user: {
+        username: this.state.username,
+        password: this.state.password,
+
+      }
+})
+}).then(res=> res.json()).then(user => {
+    localStorage.setItem("JWT", user.jwt);
+    this.setState( {userData: user.auth,
+                    loggedIn: true,
+        } )
+  })
 }
 
 inputCatcher=(event)=>{
@@ -155,12 +193,45 @@ inputCatcher=(event)=>{
     [event.target.name] : event.target.value
   } )
 }
-
+onClickSave=(event)=>{
+  let date = dateString(this.state.selectedDate, this.state.selectedMonth)
+  // if (event.currentTarget.children[0].children[0].value == ""){
+  //   ; 
+  // }
+  let string = event.currentTarget.children[0].children[0].value
+  this.setState({
+     eventChange : string
+  })
+  fetch("http://localhost:3050/api/v1/save", {
+  method: "POST",
+  headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      Authorization: `Bearer ${localStorage.JWT}`
+    },
+    body: JSON.stringify({
+        memo: {
+          user_id: this.state.userData["user"].id,
+          note: this.state.noteValue,
+          date: date
+        }
+         
+        
+    }) 
+}
+).then(res=> res.json()).then(data=>this.setState({
+  noteData: data
+  })
+)}
+// onColorChange=(input)=>{
+//   this.setState({
+//     color: input
+//   })
+// }
 
 render() {
 
-console.log(this.state)
- const {registered, username, email, password, loggedIn} = this.state
+ const {noteValue, userData, unregistered, username, email, password, loggedIn} = this.state
 return (
 
     <div className="App">
@@ -172,9 +243,16 @@ return (
     date={this.state.selectedDate}
     arrowClick={this.arrowClick}
     />
-    {loggedIn ? <NewNote/> : <LoginForm
+    {loggedIn ? <NewNote 
+      onClickSave={this.onClickSave}
+      noteData={this.state.noteData[0].note}
+      userData={userData}
+      noteValue={noteValue}
+      onChange={this.inputCatcher}
+      /> : <LoginForm
+    loginUser={this.loginUser}
     loggedIn={loggedIn}
-    registered={registered}
+    registered={unregistered}
     inputCatcher={this.inputCatcher} 
     username={username}
     password={password}

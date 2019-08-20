@@ -32,7 +32,7 @@ function LoginForm(props){
 		    Password:
 		    <input style={inputStyle} type="password" name="password" />
 		  </label>
-		  <input style={buttonStyle} type="submit" value="Submit" />
+		  <input style={buttonStyle} onClick={()=>props.loginUser()}type="submit" value="Submit" />
 		</form>
 
 	</div>
