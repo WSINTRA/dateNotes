@@ -5,6 +5,8 @@ import Cal from './components/cal'
 import LoginForm from './components/loginForm'
 import NewNote from './components/newNote'
 import dateString from './components/dateString'
+import getTodaysDay from './components/getTodaysDay'
+
 
 class App extends React.Component {
 
@@ -17,16 +19,15 @@ class App extends React.Component {
     userData: [],
     noteData: [],
     loggedIn: null,
-    unregistered: true,
+    registered: null,
     color: {},
-    eventChange: "",
     noteValue: ""
   }
 
 componentDidMount() {
   this.setState({
-    selectedDate: this.getTodaysDay("date"),
-    selectedMonth: this.getTodaysDay("month")
+    selectedDate: getTodaysDay("date"),
+    selectedMonth: getTodaysDay("month")
   })
 
   if (localStorage.JWT) {
@@ -51,25 +52,6 @@ componentDidMount() {
 
 }
 /////////////////////////////////////////////////////////
-getTodaysDay = (request) =>{
-  //Takes in a string request and returns part of the date 
-  //from the string "day month date year"
-
-let d = new Date()
-let date = d.toDateString().split(' ');
-    switch(request) {
-      case "day":
-      return date[0].toLowerCase()
-      case "month":
-      return date[1].toLowerCase()
-      case "date":
-      return date[2]
-      case "year":
-      return date[3]
-      default:
-      return null
-    }
-}
 //pass the date along with a 1 or a -1 for right and left,
 arrowClick =(e, month)=> {
   let direction = e.currentTarget.getAttribute("name")
@@ -82,8 +64,7 @@ arrowClick =(e, month)=> {
     break;
   }
 }
-
-getDate = (prev,upOrDown) => {
+getDate =(prev,upOrDown,state)=>{
   let months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
   let selectedMonth = "";
 
@@ -134,12 +115,12 @@ monthObject = [
 createNewUser = (event) => {
   event.preventDefault()
   //Build some sort of error handling for username, email and password
-  console.log("submitting",{user: {
-        username: this.state.username,
-        password: this.state.password,
-        email: this.state.email
+  // console.log("submitting",{user: {
+  //       username: this.state.username,
+  //       password: this.state.password,
+  //       email: this.state.email
 
-      } } )
+  //     } } )
   fetch("http://localhost:3050/api/v1/users", {
     method: "POST",
     headers: {
@@ -158,33 +139,47 @@ createNewUser = (event) => {
   }
   ).then(res=> res.json()).then(user => {
     localStorage.setItem("JWT", user.jwt);
-    this.setState( {userData: user.auth,
-      unregistered: false} )
+    this.setState( {
+      userData: user,
+      loggedIn: true} )
   }).then(()=> alert("Registered"))
 
 }
 ////////////////////////////////////////////////
 //Login needs to return a JWT
 loginUser = (event) => {
-fetch("http://localhost:3050/api/v1/login", {
-  method: "POST",
-  headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({
-      user: {
-        username: this.state.username,
-        password: this.state.password,
-
-      }
-})
-}).then(res=> res.json()).then(user => {
-    localStorage.setItem("JWT", user.jwt);
-    this.setState( {userData: user.auth,
-                    loggedIn: true,
-        } )
+  event.preventDefault()
+  fetch("http://localhost:3050/api/v1/login", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify({
+        user: {
+          username: this.state.username,
+          password: this.state.password,
+        }
   })
+  }).then(res=> {
+    if (!res.ok) {
+      const error = new Error(res)
+      error.message = res.statusText
+      error.name = res.status
+      throw error
+    }
+    return res.json()
+  })
+  .then(user => {
+      localStorage.setItem("JWT", user.jwt);
+      this.setState({
+        userData: user,
+        loggedIn: true,
+        noteData: user.user.memos
+      })
+    }).catch(err=> {
+      console.log("error:",err)
+    })
 }
 
 inputCatcher=(event)=>{
@@ -195,13 +190,6 @@ inputCatcher=(event)=>{
 }
 onClickSave=(event)=>{
   let date = dateString(this.state.selectedDate, this.state.selectedMonth)
-  // if (event.currentTarget.children[0].children[0].value == ""){
-  //   ; 
-  // }
-  let string = event.currentTarget.children[0].children[0].value
-  this.setState({
-     eventChange : string
-  })
   fetch("http://localhost:3050/api/v1/save", {
   method: "POST",
   headers: {
@@ -214,15 +202,21 @@ onClickSave=(event)=>{
           user_id: this.state.userData["user"].id,
           note: this.state.noteValue,
           date: date
-        }
-         
-        
+        }        
     }) 
 }
 ).then(res=> res.json()).then(data=>this.setState({
   noteData: data
   })
 )}
+
+register=(event)=>{
+event.preventDefault()
+this.setState({
+  registered: true
+})
+}
+
 // onColorChange=(input)=>{
 //   this.setState({
 //     color: input
@@ -231,28 +225,30 @@ onClickSave=(event)=>{
 
 render() {
 
- const {noteValue, userData, unregistered, username, email, password, loggedIn} = this.state
+ const {registered, noteValue, userData, username, email, password, loggedIn} = this.state
 return (
 
     <div className="App">
     <Cal 
     monthObject={this.monthObject}
-    currentMonth={this.getTodaysDay("month")} 
-    currentDate={this.getTodaysDay("date")}
+    currentMonth={getTodaysDay("month")} 
+    currentDate={getTodaysDay("date")}
     month={this.state.selectedMonth}
     date={this.state.selectedDate}
     arrowClick={this.arrowClick}
     />
+
     {loggedIn ? <NewNote 
       onClickSave={this.onClickSave}
-      noteData={this.state.noteData[0].note}
+      noteData={this.state.noteData}
       userData={userData}
       noteValue={noteValue}
       onChange={this.inputCatcher}
       /> : <LoginForm
+      register={this.register}
     loginUser={this.loginUser}
     loggedIn={loggedIn}
-    registered={unregistered}
+    registered={registered}
     inputCatcher={this.inputCatcher} 
     username={username}
     password={password}

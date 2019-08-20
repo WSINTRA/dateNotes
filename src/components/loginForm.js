@@ -12,10 +12,10 @@ function LoginForm(props){
 	let buttonStyle = {
 
 	}
-	let loggedInTestToken = props.registered
+	
 
 	return (
-    loggedInTestToken ? <RegisterForm 
+    props.registered ? <RegisterForm 
     username={props.username}
     password={props.password}
     email={props.email}
@@ -26,13 +26,23 @@ function LoginForm(props){
 		<form>
 		  <label style={labelStyle}>
 		    Username:
-		    <input style={inputStyle} type="text" name="username" />
+		    <input onChange={(e)=>props.inputCatcher(e)}
+		    style={inputStyle} 
+		    type="text" 
+		    value={props.username}
+		    name="username" />
 		  </label>
 		   <label>
 		    Password:
-		    <input style={inputStyle} type="password" name="password" />
+		     <input style={inputStyle} 
+		    value={props.password}
+		    onChange={(e)=>props.inputCatcher(e)}
+		    type="password" 
+		    name="password" />
 		  </label>
-		  <input style={buttonStyle} onClick={()=>props.loginUser()}type="submit" value="Submit" />
+		  <input style={buttonStyle} onClick={(e)=>props.loginUser(e)}type="submit" value="Login" />
+		
+         <input style={buttonStyle} onClick={(e)=>props.register(e)}type="submit" value="Click to register new user" />
 		</form>
 
 	</div>
