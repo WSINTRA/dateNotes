@@ -29,7 +29,6 @@ componentDidMount() {
     selectedDate: getTodaysDay("date"),
     selectedMonth: getTodaysDay("month")
   })
-
   if (localStorage.JWT) {
     fetch("http://localhost:3050/api/v1/profile", {
       method: "GET",
@@ -64,6 +63,22 @@ arrowClick =(e, month)=> {
     break;
   }
 }
+
+//write a function that returns only notes made for the selected day
+dailyNotes=()=>{
+
+  let date = dateString(this.state.selectedDate, this.state.selectedMonth)
+
+  let dailyNote = this.state.noteData.filter(el => el.date === date)
+  if (dailyNote.length >0){
+    
+     return dailyNote[0].note
+   
+  }
+  else return null
+ 
+}
+
 getDate =(prev,upOrDown,state)=>{
   let months = ["jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"]
   let selectedMonth = "";
@@ -189,7 +204,9 @@ inputCatcher=(event)=>{
   } )
 }
 onClickSave=(event)=>{
+  // let prevMemo = this.dailyNotes()  
   let date = dateString(this.state.selectedDate, this.state.selectedMonth)
+  
   fetch("http://localhost:3050/api/v1/save", {
   method: "POST",
   headers: {
@@ -204,11 +221,14 @@ onClickSave=(event)=>{
           date: date
         }        
     }) 
-}
-).then(res=> res.json()).then(data=>this.setState({
+   }
+  ).then(res=> res.json()).then(data=>this.setState({
   noteData: data
-  })
-)}
+  }) )
+  // 
+} 
+
+
 
 register=(event)=>{
 event.preventDefault()
@@ -216,12 +236,21 @@ this.setState({
   registered: true
 })
 }
+getSelectedDay=()=>{
+let date = dateString(this.state.selectedDate, this.state.selectedMonth)
+let day = new Date(date)
+let name = day.getDay();
+let dayArray = ["Moons day","Týrs day","Odins day","Thors day","Frijas day","Saturns day","Sun day"]
+return dayArray[name]
+}
+onDateClick=(event)=>{
+  //Find out what day of the week this is
+  this.setState({
+    selectedDate: event,
+    noteValue: "",
+  })
 
-// onColorChange=(input)=>{
-//   this.setState({
-//     color: input
-//   })
-// }
+}
 
 render() {
 
@@ -229,6 +258,8 @@ render() {
 return (
 
     <div className="App">
+    Today is : {getTodaysDay("date")}/{getTodaysDay("month").toUpperCase()}/{getTodaysDay("year")}
+  
     <Cal 
     monthObject={this.monthObject}
     currentMonth={getTodaysDay("month")} 
@@ -236,26 +267,31 @@ return (
     month={this.state.selectedMonth}
     date={this.state.selectedDate}
     arrowClick={this.arrowClick}
+    onDateClick={this.onDateClick}
+    dayName={this.getSelectedDay()}
     />
+    
 
     {loggedIn ? <NewNote 
       onClickSave={this.onClickSave}
       noteData={this.state.noteData}
       userData={userData}
       noteValue={noteValue}
+      dailyNote={this.dailyNotes()}
       onChange={this.inputCatcher}
       /> : <LoginForm
       register={this.register}
-    loginUser={this.loginUser}
-    loggedIn={loggedIn}
-    registered={registered}
-    inputCatcher={this.inputCatcher} 
-    username={username}
-    password={password}
-    email={email}
-    submit={this.createNewUser}/>}
+      loginUser={this.loginUser}
+      loggedIn={loggedIn}
+      registered={registered}
+      inputCatcher={this.inputCatcher} 
+      username={username}
+      password={password}
+      email={email}
+      submit={this.createNewUser}/>}
+    
     </div>
-  );
+  ) ;
 }
 }
 

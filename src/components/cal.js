@@ -70,10 +70,10 @@ const arrowRight = '<svg viewBox="0 0 6.54 6.88"><defs><linearGradient id="a" x1
     	
     		{month.days.map( date=> {
 		    			return (date===parseInt(props.date) ? 
-		    				<p style={dateStyling}>
+		    				<p style={dateStyling} onClick={(e)=>props.onDateClick(e.target.innerText)}>
 		    				<b style={highlightedDateStyle}>{date}
 		    				</b></p> : 
-		    				<p style={dateStyling}>{date}
+		    				<p style={dateStyling}onClick={(e)=>props.onDateClick(e.target.innerText)}>{date}
 		    				</p>
 		    				)
     					  }
@@ -83,7 +83,7 @@ const arrowRight = '<svg viewBox="0 0 6.54 6.88"><defs><linearGradient id="a" x1
     			) 
  		    } 
    		) 
-	}
+	}{props.dayName}
     </div>
     </div>
   );

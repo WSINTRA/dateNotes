@@ -51,15 +51,17 @@ let noteList = {
 	return (<div style={noteStyle}>
 		<div style={noteList}>
 		</div>
-		<button 
-		onClick={(event)=>props.onClickSave(event)}
-		style={{backgroundColor: "#E2A887", color: "#364B5D"}}><label><textarea 
+		<label><textarea 
 		value={props.noteValue}
 		type="text" 
 		name="noteValue"
+		placeholder={props.dailyNote}
 		onChange={(e)=>props.onChange(e)}
-		style={inputStyle}></textarea></label><br/>
-		Click To<br/>Save</button></div>)
+		style={inputStyle}></textarea></label><br/><button 
+		onClick={(event)=>props.onClickSave(event)}
+		style={{backgroundColor: "#E2A887", color: "#364B5D"}}>
+		Click To<br/>Save</button>
+		</div>)
 
 }
 export default NewNote;
