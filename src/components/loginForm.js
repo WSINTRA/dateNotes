@@ -21,7 +21,7 @@ function LoginForm(props){
 		    type="text" 
 		    value={props.username}
 		    name="username" />
-		  </label>
+		  </label><br/>
 		   <label>
 		    Password:
 		     <input style={inputStyle} 
@@ -29,9 +29,9 @@ function LoginForm(props){
 		    onChange={(e)=>props.inputCatcher(e)}
 		    type="password" 
 		    name="password" />
-		  </label>
+		  </label><br/>
 		  <input style={buttonStyle} onClick={(e)=>props.loginUser(e)}type="submit" value="Login" />
-		
+		<br/>
          <input style={buttonStyle} onClick={(e)=>props.register(e)}type="submit" value="Click to register new user" />
 		</form>
 

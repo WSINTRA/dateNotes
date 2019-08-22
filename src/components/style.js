@@ -48,10 +48,12 @@ const calStyle = {
 	width: "15vw",
 }
 const labelStyle = {
-	color: "Blue"
+	
 }
 const inputStyle = {
-
+    color: "#CD4C5E",
+	
+		
 }
 const buttonStyle = {
 

@@ -14,7 +14,7 @@ function RegisterForm(props){
 		    type="text" 
 		    value={props.username}
 		    name="username" />
-		  </label>
+		  </label><br/>
 		   <label>
 		    Password:
 		    <input style={inputStyle} 
@@ -22,7 +22,7 @@ function RegisterForm(props){
 		    onChange={(e)=>props.inputCatcher(e)}
 		    type="password" 
 		    name="password" />
-		  </label>
+		  </label><br/>
 		   <label>
 		    email:
 		    <input style={inputStyle} 
@@ -30,7 +30,7 @@ function RegisterForm(props){
 		    onChange={(e)=>props.inputCatcher(e)}
 		    type="text" 
 		    name="email" />
-		  </label>
+		  </label><br/>
 		  <input style={buttonStyle} 
 		  onClick={(e)=>props.submit(e)}
 		  type="submit" 

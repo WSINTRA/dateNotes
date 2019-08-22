@@ -47,7 +47,7 @@ componentDidMount() {
     }).then(res => res.json()).then(res => this.setState({
       noteData: res,
     }) );
-  }
+  console.log("Welcome to Date Notes") }
 
 }
 /////////////////////////////////////////////////////////
@@ -125,7 +125,12 @@ monthObject = [
   days:[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31]},
 ]
 
-
+emailVaild=(emailField)=>{
+  if (emailField.includes("@")){
+    return true
+  }
+  else return false
+}
 //////////////////////////////////////////
 createNewUser = (event) => {
   event.preventDefault()
@@ -136,7 +141,12 @@ createNewUser = (event) => {
   //       email: this.state.email
 
   //     } } )
-  fetch("http://localhost:3050/api/v1/users", {
+  let user, pass, email;
+  user = this.state.username;
+  pass = this.state.password;
+  email = this.state.email;
+  if (this.emailVaild(email) && user.length>1 && pass.length>1){
+      fetch("http://localhost:3050/api/v1/users", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -144,11 +154,10 @@ createNewUser = (event) => {
     },
     body: JSON.stringify({
       user: {
-        username: this.state.username,
-        password: this.state.password,
-        email: this.state.email
-
-      }
+        username: user,
+        password: pass,
+        email: email,
+             }
 
     })
   }
@@ -156,8 +165,13 @@ createNewUser = (event) => {
     localStorage.setItem("JWT", user.jwt);
     this.setState( {
       userData: user,
-      loggedIn: true} )
+      loggedIn: true,
+      noteData: [],
+    } )
   }).then(()=> alert("Registered"))
+  }
+  else alert("Please make sure you type valid entries for username, password and email")
+
 
 }
 ////////////////////////////////////////////////
@@ -190,11 +204,15 @@ loginUser = (event) => {
       this.setState({
         userData: user,
         loggedIn: true,
-        noteData: user.user.memos
-      })
+        noteData: user.user.memos,
+        password: "",
+        username: "",
+        email: "",
+      });console.log("logged in");
     }).catch(err=> {
-      console.log("error:",err)
+      alert(err)
     })
+
 }
 
 inputCatcher=(event)=>{
@@ -249,7 +267,16 @@ onDateClick=(event)=>{
     selectedDate: event,
     noteValue: "",
   })
-
+}
+logout=()=>{
+  localStorage.clear()
+  this.setState({
+    loggedIn: false,
+    registered: false,
+    noteValue: "",
+    username: "",
+    password: "",
+  })
 }
 
 render() {
@@ -290,7 +317,7 @@ return (
       email={email}
       submit={this.createNewUser}/>}
     
-    </div>{loggedIn ? <button>LOGOUT</button> : null}</div>
+    </div>{loggedIn ? <button onClick={()=>this.logout()}>LOGOUT</button> : null}</div>
   ) ;
 }
 }
