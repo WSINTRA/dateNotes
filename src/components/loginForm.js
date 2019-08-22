@@ -1,18 +1,8 @@
 import React from 'react';
 import RegisterForm from './registerForm'
+import {labelStyle, inputStyle, buttonStyle} from './style'
 
 function LoginForm(props){
-
-	let labelStyle = {
-		color: "Blue"
-	}
-	let inputStyle = {
-
-	}
-	let buttonStyle = {
-
-	}
-	
 
 	return (
     props.registered ? <RegisterForm 

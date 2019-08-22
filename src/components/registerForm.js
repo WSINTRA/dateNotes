@@ -1,16 +1,8 @@
 import React from 'react';
+import {labelStyle, inputStyle, buttonStyle} from './style'
 
 function RegisterForm(props){
 
-	let labelStyle = {
-		color: "Blue"
-	}
-	let inputStyle = {
-
-	}
-	let buttonStyle = {
-
-	}
 	return (
 	<div>
 	CREATE A NEW USER

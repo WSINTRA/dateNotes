@@ -256,7 +256,7 @@ render() {
 
  const {registered, noteValue, userData, username, email, password, loggedIn} = this.state
 return (
-
+    <div>
     <div className="App">
     Today is : {getTodaysDay("date")}/{getTodaysDay("month").toUpperCase()}/{getTodaysDay("year")}
   
@@ -290,7 +290,7 @@ return (
       email={email}
       submit={this.createNewUser}/>}
     
-    </div>
+    </div>{loggedIn ? <button>LOGOUT</button> : null}</div>
   ) ;
 }
 }
