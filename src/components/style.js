@@ -47,6 +47,13 @@ const calStyle = {
 	height: "43vh",
 	width: "15vw",
 }
+const formStyle={
+	
+	width: "20rem",
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "right"
+}
 const labelStyle = {
 	
 }
@@ -56,13 +63,13 @@ const inputStyle = {
 		
 }
 const buttonStyle = {
-
+    
 }
 const noteStyle={
 	borderRadius: "1rem",
 	position: "absolute",
-	marginTop: "-32vh",
-	marginLeft: "25vw",
+	// marginTop: "-32vh",
+	// marginLeft: "15vw",
 	borderStyle: "dashed",
 	borderColor: "#364B5D",
 	backgroundColor: "#E2A887",
@@ -75,8 +82,8 @@ const textInputStyle={
 		textAlign: "left",
 		color: "#CD4C5E",
 		padding: "2rem",
-		width: "50vw",
-		fontSize: "3rem",
+		width: "80vw",
+		// fontSize: "3rem",
         height: "50vh",
 		background: "radial-gradient(#F5FF16, #FFFAA1)",
 		outlineStyle: "none",
@@ -100,6 +107,7 @@ export {
   	dateStyling,
   	highlightedDateStyle,
   	labelStyle,
+  	formStyle,
   	inputStyle,
   	buttonStyle,
 }

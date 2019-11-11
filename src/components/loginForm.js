@@ -12,7 +12,7 @@ function LoginForm(props){
     inputCatcher={props.inputCatcher}
     submit={props.submit}/> : 
 	<div>
-	LOG IN EXISTING USER
+	<h2>LOG IN EXISTING USER</h2>
 		<form>
 		  <label style={labelStyle}>
 		    Username:

@@ -15,6 +15,7 @@ class App extends React.Component {
     selectedMonth: "",
     username: "",
     password: "",
+    passwordConfirm: "",
     email: "",
     userData: [],
     noteData: [],
@@ -141,11 +142,12 @@ createNewUser = (event) => {
   //       email: this.state.email
 
   //     } } )
-  let user, pass, email;
+  let user, pass, confirm, email;
   user = this.state.username;
   pass = this.state.password;
+  confirm = this.state.passwordConfirm;
   email = this.state.email;
-  if (this.emailVaild(email) && user.length>1 && pass.length>1){
+  if (this.emailVaild(email) && user.length>1 && pass.length>1 && pass === confirm){
       fetch("http://localhost:3050/api/v1/users", {
     method: "POST",
     headers: {
@@ -281,10 +283,10 @@ logout=()=>{
 
 render() {
 
- const {registered, noteValue, userData, username, email, password, loggedIn} = this.state
+ const {passwordConfirm, registered, noteValue, userData, username, email, password, loggedIn} = this.state
 return (
-    <div>
     <div className="App">
+    <div >
     Today is : {getTodaysDay("date")}/{getTodaysDay("month").toUpperCase()}/{getTodaysDay("year")}
   
     <Cal 
@@ -296,9 +298,9 @@ return (
     arrowClick={this.arrowClick}
     onDateClick={this.onDateClick}
     dayName={this.getSelectedDay()}
-    />
+    /></div>
     
-
+    <div>
     {loggedIn ? <NewNote 
       onClickSave={this.onClickSave}
       noteData={this.state.noteData}
@@ -306,6 +308,7 @@ return (
       noteValue={noteValue}
       dailyNote={this.dailyNotes()}
       onChange={this.inputCatcher}
+      logout={this.logout}
       /> : <LoginForm
       register={this.register}
       loginUser={this.loginUser}
@@ -313,11 +316,15 @@ return (
       registered={registered}
       inputCatcher={this.inputCatcher} 
       username={username}
+      passwordConfirm={passwordConfirm}
       password={password}
       email={email}
-      submit={this.createNewUser}/>}
+      submit={this.createNewUser}
+      />}
+      </div>
+      <div>
     
-    </div>{loggedIn ? <button onClick={()=>this.logout()}>LOGOUT</button> : null}</div>
+    </div></div>
   ) ;
 }
 }
