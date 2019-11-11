@@ -1,12 +1,13 @@
 import React from 'react';
-import {labelStyle, inputStyle, buttonStyle} from './style'
+import {formStyle, labelStyle, inputStyle, buttonStyle} from './style'
 
 function RegisterForm(props){
 
 	return (
 	<div>
-	CREATE A NEW USER
-		<form>
+	<br/>
+		<form style={formStyle}>
+		<h2>CREATE A NEW USER</h2>
 		  <label style={labelStyle}>
 		    Username:
 		    <input onChange={(e)=>props.inputCatcher(e)}
@@ -22,6 +23,14 @@ function RegisterForm(props){
 		    onChange={(e)=>props.inputCatcher(e)}
 		    type="password" 
 		    name="password" />
+		  </label><br/>
+		  <label>
+		    Password Confirm:
+		    <input style={inputStyle} 
+		    value={props.passwordConfirm}
+		    onChange={(e)=>props.inputCatcher(e)}
+		    type="password" 
+		    name="passwordConfirm" />
 		  </label><br/>
 		   <label>
 		    email:

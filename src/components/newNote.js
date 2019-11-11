@@ -14,7 +14,8 @@ return (<div style={noteStyle}>
 		style={textInputStyle}></textarea></label><br/><button 
 		onClick={(event)=>props.onClickSave(event)}
 		style={{backgroundColor: "#C35653", color: "#364B5D"}}><b>
-		<br/>Save</b></button>
+		<br/>Save</b></button><br/>
+		<button className="logout"onClick={()=>props.logout()}>LOGOUT</button>
 		</div>)
 
 }

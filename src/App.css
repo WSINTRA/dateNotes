@@ -1,5 +1,28 @@
 .App {
+  height: 60vh;
   text-align: center;
+  display: grid;
+  grid-auto-rows: minmax(100px, auto);
+  margin: 1rem;
+}
+body {
+/*  background-image: linear-gradient(to left #6699FB, #F961D7)*/
+  background-color: #FA97FC;
+}
+textarea {
+  font-size: 3rem;
+  margin-bottom: -2rem;
+}
+@media screen and (max-width: 600px) {
+
+  textarea {
+    font-size: 1rem;
+  }
+
+}
+
+.logout {
+  grid-row-start: 3;
 }
 
 .App-logo {
